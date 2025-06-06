@@ -29,19 +29,8 @@
             <img id="P2-1" src="2-1.jpg" crossorigin="anonymous"/>
             <img id="P1" src="P1.png" crossorigin="anonymous"/>
             <img id="P2" src="P2.png" crossorigin="anonymous"/>
-            <a-mixin
-                id="frame"
-                geometry="primitive: plane; width: 0.5783552; height: 0.8192"
-                material="color: white; shader: flat"
-                animation__scale="property: scale; to: 1.2 1.2 1.2; dur: 200; startEvents: mouseenter"
-                animation__scale_reverse="property: scale; to: 1 1 1; dur: 200; startEvents: mouseleave"
-            ></a-mixin>
-            <a-mixin
-                id="poster"
-                geometry="primitive: plane; width: 0.544768; height: 0.786432"
-                material="color: white; shader: flat"
-                position="0 0 0.005"
-            ></a-mixin>
+            <a-mixin id="frame" geometry="primitive: plane; width: 0.5783552; height: 0.8192" material="color: white; shader: flat" animation__scale="property: scale; to: 1.2 1.2 1.2; dur: 200; startEvents: mouseenter" animation__scale_reverse="property: scale; to: 1 1 1; dur: 200; startEvents: mouseleave"></a-mixin>
+            <a-mixin id="poster" geometry="primitive: plane; width: 0.544768; height: 0.786432" material="color: white; shader: flat" position="0 0 0.005"></a-mixin>
         </a-assets>
         <!-- 環境光線，避免影片太暗 -->
         <a-light type="ambient" intensity="1.5"></a-light>
@@ -80,10 +69,10 @@
         <!-- 響應式按鈕 -->
         <a-entity id="menu" highlight position="0 -0.8 0">
             <a-entity id="P1" position="-0.25 0 0" mixin="frame" class="raycastable menu-button">
-                <a-entity material="src: #P1-1;" mixin="poster"></a-entity>
+                <a-entity material="src=1-1.jpg;" mixin="poster"></a-entity>
             </a-entity>
             <a-entity id="P2" position="0.25 0 0" mixin="frame" class="raycastable menu-button">
-                <a-entity material="src: #P2-1;" mixin="poster"></a-entity>
+                <a-entity material="src=2-1.jpg;" mixin="poster"></a-entity>
             </a-entity>
         </a-entity>
 </a-entity>
