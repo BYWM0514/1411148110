@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>試做1</title>
+        <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+        <style>
+            body { margin: 0; overflow: hidden; }
+        </style>
+    </head>
+    <body>
+        <a-scene
+        mindar-image="imageTargetSrc:targets.mind; autoStart: true; uiScanning: true;"
+        color-space="sRGB"
+        renderer="colorManagement: true; physicallyCorrectLights: true"
+        vr-mode-ui="enabled: false"
+        device-orientation-permission-ui="enabled: false"
+        >
+            <a-assets>
+                <video id="introVid" src="video.mp4" preload="auto" loop muted></video>
+            </a-assets>
+            <a-light type="ambient" intensity="1.5"></a-light>
+            <a-camera look-controls="enabled: false"></a-camera>
+            <a-entity mindar-image-target="targetIndex: 0">
+                <a-video
+                id="videoEntity"
+                src="#introVid"
+                width="0.7" height="1.2"
+                autoplay="false"
+                loop="true"
+                material="shader: flat"
+                position="0 0 0">
+                ></a-video>
+
+                <!-- 播放按鈕 -->
+                <a-plane id="btn-play"
+                    position="-0.45 -1.1 0.01"
+                    width="0.3" height="0.12"
+                    color="#2ecc71"
+                    opacity="0.7"
+                    material="shader: flat; transparent: true"
+                    class="clickable"
+                    radius="0.05">
+                        <a-text value="▶ 播放"
+                        align="center"
+                        color="white"
+                        width="1"
+                        position="0 0 0.01">
+                        </a-text>
+                </a-plane>
+
+                <!-- 暫停按鈕 -->
+                <a-plane id="btn-pause"
+                    position="0 -0.85 0.01"
+                    width="0.3" height="0.12"
+                    color="#e74c3c"
+                    opacity="0.7"
+                    material="shader: flat; transparent: true"
+                    class="clickable">
+                        <a-text value="⏸ 暫停"
+                            align="center"
+                            color="white"
+                            width="1"
+                            position="0 0 0.01">
+                        </a-text>
+                </a-plane>
+
+                <!-- 重播按鈕 -->
+                <a-plane id="btn-replay"
+                    position="0.45 -0.85 0.01"
+                    width="0.3" height="0.12"
+                    color="#f1c40f"
+                    opacity="0.7"
+                    material="shader: flat; transparent: true"
+                    class="clickable">
+                        <a-text value="⟳ 重播"
+                            align="center"
+                            color="black"
+                            width="1"
+                            position="0 0 0.01">
+                        </a-text>
+                </a-plane>
+
+                 <a-plane 
+                    id="btn-origin"
+                    position="-0.25 -1.1 0.01"
+                    width="0.4"
+                    height="0.15"
+                    color="#3498db"
+                    class="clickable">
+                        <a-text 
+                            value="名稱由來"
+                            align="center"
+                            color="black"
+                            width="0.8"
+                            position="0 0 0.02">
+                        </a-text>
+                </a-plane>
+                <a-plane 
+                    id="btn-architecture"
+                    position="0.25 -1.1 0.01"
+                    width="0.4"
+                    height="0.15"
+                    color="#e67e22"
+                    class="clickable">
+                        <a-text 
+                            value="歷史建築"
+                            align="center"
+                            color="black"
+                            width="1"
+                            position="0 0 0.02">
+                        </a-text>
+                    </a-plane>
+                </a-entity>
+            </a-entity>
+        </a-scene>
+        <script>
+            const video = document.querySelector('#introVid');
+            const videoPlane = document.querySelector('#videoEntity');
+            const targetEntity = document.querySelector('a-entity[mindar-image-target]');
+            videoPlane.addEventListener('click', () => {
+            if (video.paused) {
+            video.play();
+            } else {
+            video.pause();
+            }
+            });
+            targetEntity.addEventListener('targetFound', () => {
+            video.play();
+            });
+            targetEntity.addEventListener('targetLost', () => {
+            video.pause();
+            video.currentTime = 0;
+            });
+        </script>
+    </body>
+</html>
