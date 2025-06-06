@@ -78,7 +78,7 @@
                 </a-image>
             </a-entity>
         <!-- 響應式按鈕 -->
-        <a-entity id="menu" highlight>
+        <a-entity id="menu" highlight position="0 -0.8 0">
             <a-entity id="P1" position="-0.25 0 0" mixin="frame" class="raycastable menu-button">
                 <a-entity material="src: #P1-1;" mixin="poster"></a-entity>
             </a-entity>
@@ -86,6 +86,7 @@
                 <a-entity material="src: #P2-1;" mixin="poster"></a-entity>
             </a-entity>
         </a-entity>
+</a-entity>
         </a-scene>
         <!-- 點擊播放 / 暫停的互動邏輯 -->
         <script>
