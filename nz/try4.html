@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>我成功了</title>
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+    }
+    .buttons {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      display: flex;
+      gap: 10px;
+    }
+    button {
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+    button img {
+      width: 80px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- HTML 按鈕 -->
+  <div class="buttons">
+    <button id="btn1"><img src="P1.png" alt="按鈕1" /></button>
+    <button id="btn2"><img src="P2.png" alt="按鈕2" /></button>
+  </div>
+
+  <!-- A-Frame 場景 -->
+  <a-scene
+    mindar-image="imageTargetSrc: targets.mind; autoStart: true; uiScanning: true;"
+    color-space="sRGB"
+    renderer="colorManagement: true; physicallyCorrectLights: true"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false"
+  >
+    <a-assets>
+      <video id="introVid" src="video.mp4" preload="auto" loop muted></video>
+      <img id="popup1-img" src="1-1.jpg" />
+      <img id="popup2-img" src="2-1.jpg" />
+    </a-assets>
+
+    <a-camera look-controls="enabled: false" position="0 0 0"></a-camera>
+    <a-light type="ambient" intensity="1.5"></a-light>
+
+    <a-entity mindar-image-target="targetIndex: 0">
+      <!-- 影片 -->
+      <a-video
+        id="videoEntity"
+        src="#introVid"
+        width="0.7" height="1.2"
+        autoplay="false"
+        loop="true"
+        material="shader: flat"
+        position="0 0 0"
+      ></a-video>
+
+      <!-- 按鈕圖片切換 -->
+      <a-image id="popup1" src="#popup1-img" position="0 0 0.01" width="1.5" height="1" visible="false"></a-image>
+      <a-image id="popup2" src="#popup2-img" position="0 0 0.01" width="1.5" height="1" visible="false"></a-image>
+    </a-entity>
+  </a-scene>
+
+  <!-- JS 控制邏輯 -->
+  <script>
+    window.onload = () => {
+  const video = document.querySelector('#introVid');
+  const videoPlane = document.querySelector('#videoEntity');
+  const popup1 = document.querySelector('#popup1');
+  const popup2 = document.querySelector('#popup2');
+  const btn1 = document.querySelector('#btn1');
+  const btn2 = document.querySelector('#btn2');
+  const targetEntity = document.querySelector('a-entity[mindar-image-target]');
+
+  // 預設全部隱藏
+  videoPlane.setAttribute('visible', false);
+  popup1.setAttribute('visible', false);
+  popup2.setAttribute('visible', false);
+
+  // 點擊影片平面播放/暫停
+  videoPlane.addEventListener('click', () => {
+    if (video.paused) {
+      video.play();
+    } else {
+      video.pause();
+    }
+  });
+
+  // 掃描圖卡時自動播放影片
+  targetEntity.addEventListener('targetFound', () => {
+    if (!popup1.getAttribute("visible") && !popup2.getAttribute("visible")) {
+      video.play();
+    }
+    videoPlane.setAttribute("visible", true);
+  });
+
+  // 離開圖卡時暫停影片並重設，圖片也關掉
+  targetEntity.addEventListener('targetLost', () => {
+    video.pause();
+    video.currentTime = 0;
+    videoPlane.setAttribute("visible", true);
+    popup1.setAttribute("visible", false);
+    popup2.setAttribute("visible", false);
+  });
+
+  // 按鈕1：顯示圖片1，影片隱藏
+  btn1.addEventListener("click", () => {
+    const isVisible = popup1.getAttribute("visible");
+    popup1.setAttribute("visible", !isVisible);
+
+    if (!isVisible) {
+      video.pause();
+      videoPlane.setAttribute("visible", false);
+      popup2.setAttribute("visible", false);
+    } else {
+      videoPlane.setAttribute("visible", true);
+    }
+  });
+
+  // 按鈕2：顯示圖片2，影片隱藏
+  btn2.addEventListener("click", () => {
+    const isVisible = popup2.getAttribute("visible");
+    popup2.setAttribute("visible", !isVisible);
+
+    if (!isVisible) {
+      video.pause();
+      videoPlane.setAttribute("visible", false);
+      popup1.setAttribute("visible", false);
+    } else {
+      videoPlane.setAttribute("visible", true);
+    }
+  });
+};
+  </script>
+</body>
+</html>
